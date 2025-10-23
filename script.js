@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 try {
+                    // Расширенный список математических функций и констант
                     expression = expression.replace(/sin\((.*?)\)/g, (match, p1) => `Math.sin(${p1})`);
                     expression = expression.replace(/cos\((.*?)\)/g, (match, p1) => `Math.cos(${p1})`);
                     expression = expression.replace(/tan\((.*?)\)/g, (match, p1) => `Math.tan(${p1})`);
@@ -71,6 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     expression = expression.replace(/sqrt\((.*?)\)/g, (match, p1) => `Math.sqrt(${p1})`);
                     expression = expression.replace(/pow\((.*?),(.*?)\)/g, (match, p1, p2) => `Math.pow(${p1},${p2})`);
                     expression = expression.replace(/abs\((.*?)\)/g, (match, p1) => `Math.abs(${p1})`);
+                    expression = expression.replace(/round\((.*?)\)/g, (match, p1) => `Math.round(${p1})`);
+                    expression = expression.replace(/floor\((.*?)\)/g, (match, p1) => `Math.floor(${p1})`);
+                    expression = expression.replace(/ceil\((.*?)\)/g, (match, p1) => `Math.ceil(${p1})`);
+                    expression = expression.replace(/exp\((.*?)\)/g, (match, p1) => `Math.exp(${p1})`);
 
                     expression = expression.replace(/PI/g, Math.PI);
                     expression = expression.replace(/E/g, Math.E);
@@ -79,9 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     resultSection.innerHTML = `Результат: <strong>${result}</strong>`;
 
-                    // Добавляем вычисление в историю
                     history.unshift({ formula: formula, result: result });
-                    if (history.length > 10) { // Ограничиваем историю до 10 записей
+                    if (history.length > 10) { 
                         history.pop();
                     }
                     localStorage.setItem('formulaHistory', JSON.stringify(history));
@@ -92,7 +96,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         } else {
-            resultSection.innerHTML = `<span style="color: #6c757d;">Формула не содержит переменных.</span>`;
+            try {
+                const result = Function('"use strict";return (' + formula + ')')();
+                resultSection.innerHTML = `Результат: <strong>${result}</strong>`;
+
+                history.unshift({ formula: formula, result: result });
+                if (history.length > 10) { 
+                    history.pop();
+                }
+                localStorage.setItem('formulaHistory', JSON.stringify(history));
+                renderHistory();
+
+            } catch (e) {
+                resultSection.innerHTML = `<span style="color: red;">Ошибка: проверьте синтаксис формулы.</span>`;
+            }
         }
     });
 });
