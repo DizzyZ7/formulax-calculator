@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FormuLex: Решатель формул</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>FormuLex</h1>
+        <p>Введите формулу с переменными, например: <code>(a + b) * sin(c)</code></p>
+    </header>
+    <main>
+        <section class="input-section">
+            <input type="text" id="formula-input" placeholder="Введите формулу">
+            <button id="parse-button">Создать</button>
+        </section>
+        <section id="variables-section"></section>
+        <section id="result-section"></section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
