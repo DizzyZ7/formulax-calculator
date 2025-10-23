@@ -1,9 +1,21 @@
+:root {
+    --primary-color: #005f73;
+    --secondary-color: #0a9396;
+    --background-color: #f4f7f9;
+    --card-bg-color: #fff;
+    --border-color: #ccc;
+    --error-color: #dc3545;
+    --text-color: #333;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     padding: 20px;
-    background-color: #f4f7f9;
-    color: #333;
+    background-color: var(--background-color);
+    color: var(--text-color);
     line-height: 1.6;
+    margin: 0;
 }
 
 header {
@@ -12,7 +24,13 @@ header {
 }
 
 h1 {
-    color: #005f73;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+main {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .input-section {
@@ -22,34 +40,38 @@ h1 {
 }
 
 input[type="text"] {
-    padding: 10px;
-    width: 300px;
-    border: 1px solid #ccc;
+    padding: 12px;
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid var(--border-color);
     border-radius: 5px 0 0 5px;
     font-size: 16px;
+    box-sizing: border-box;
 }
 
 #parse-button, #calculate-button {
-    padding: 10px 20px;
-    border: 1px solid #005f73;
-    background-color: #005f73;
+    padding: 12px 20px;
+    border: 1px solid var(--primary-color);
+    background-color: var(--primary-color);
     color: white;
     border-radius: 0 5px 5px 0;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 
 #parse-button:hover, #calculate-button:hover {
-    background-color: #0a9396;
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
 }
 
 #variables-section {
-    background-color: #fff;
+    background-color: var(--card-bg-color);
     border-radius: 8px;
     padding: 20px;
-    margin: 20px auto;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    max-width: 600px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    max-width: 100%;
 }
 
 .variable-input {
@@ -64,8 +86,8 @@ input[type="text"] {
 
 .variable-input input {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
+    padding: 10px;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     box-sizing: border-box;
 }
@@ -79,24 +101,45 @@ input[type="text"] {
     background-color: #e9ecef;
     border-radius: 5px;
 }
+
 #history-section {
     margin: 40px auto;
-    max-width: 600px;
+    max-width: 100%;
     text-align: left;
 }
 
-#history-section h2 {
-    text-align: center;
+#history-section .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 15px;
-    color: #005f73;
+}
+
+#history-section h2 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+#clear-history-button {
+    padding: 8px 15px;
+    background-color: var(--error-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#clear-history-button:hover {
+    background-color: #c82333;
 }
 
 #history-list {
     list-style-type: none;
     padding: 0;
-    background-color: #fff;
+    background-color: var(--card-bg-color);
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 #history-list li {
@@ -104,6 +147,7 @@ input[type="text"] {
     border-bottom: 1px solid #eee;
     transition: background-color 0.2s;
     cursor: pointer;
+    word-wrap: break-word;
 }
 
 #history-list li:last-child {
@@ -113,18 +157,34 @@ input[type="text"] {
 #history-list li:hover {
     background-color: #e9ecef;
 }
-#clear-history-button {
-    display: block;
-    margin: 0 auto 15px;
-    padding: 8px 15px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
 
-#clear-history-button:hover {
-    background-color: #c82333;
-}
+/* Адаптивность для мобильных устройств */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
 
+    .input-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    input[type="text"] {
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    #parse-button {
+        border-radius: 5px;
+    }
+
+    #history-section .history-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #history-section h2 {
+        margin-bottom: 10px;
+        text-align: center;
+    }
+}
