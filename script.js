@@ -4,11 +4,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const variablesSection = document.getElementById('variables-section');
     const resultSection = document.getElementById('result-section');
     const historyList = document.getElementById('history-list');
+    const clearHistoryButton = document.getElementById('clear-history-button');
 
     let history = JSON.parse(localStorage.getItem('formulaHistory')) || [];
 
     function renderHistory() {
         historyList.innerHTML = '';
+        if (history.length > 0) {
+            clearHistoryButton.style.display = 'block';
+        } else {
+            clearHistoryButton.style.display = 'none';
+        }
         history.forEach(item => {
             const li = document.createElement('li');
             li.textContent = `${item.formula} = ${item.result}`;
@@ -21,6 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     renderHistory();
+
+    // Обработчик кнопки "Очистить историю"
+    clearHistoryButton.addEventListener('click', () => {
+        history = [];
+        localStorage.removeItem('formulaHistory');
+        renderHistory();
+    });
 
     parseButton.addEventListener('click', () => {
         const formula = formulaInput.value;
@@ -64,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 try {
-                    // Расширенный список математических функций и констант
                     expression = expression.replace(/sin\((.*?)\)/g, (match, p1) => `Math.sin(${p1})`);
                     expression = expression.replace(/cos\((.*?)\)/g, (match, p1) => `Math.cos(${p1})`);
                     expression = expression.replace(/tan\((.*?)\)/g, (match, p1) => `Math.tan(${p1})`);
