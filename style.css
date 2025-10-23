@@ -113,4 +113,18 @@ input[type="text"] {
 #history-list li:hover {
     background-color: #e9ecef;
 }
+#clear-history-button {
+    display: block;
+    margin: 0 auto 15px;
+    padding: 8px 15px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#clear-history-button:hover {
+    background-color: #c82333;
+}
 
