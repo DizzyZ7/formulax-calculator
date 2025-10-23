@@ -1,0 +1,8 @@
+{
+  "name": "formulax-calculator",
+  "version": "1.0.0",
+  "description": "A flexible formula calculator and evaluator.",
+  "dependencies": {
+    "mathjs": "^12.4.2"
+  }
+}
