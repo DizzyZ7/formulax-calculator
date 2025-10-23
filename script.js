@@ -3,13 +3,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const parseButton = document.getElementById('parse-button');
     const variablesSection = document.getElementById('variables-section');
     const resultSection = document.getElementById('result-section');
+    const historyList = document.getElementById('history-list');
+
+    let history = JSON.parse(localStorage.getItem('formulaHistory')) || [];
+
+    function renderHistory() {
+        historyList.innerHTML = '';
+        history.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = `${item.formula} = ${item.result}`;
+            li.addEventListener('click', () => {
+                formulaInput.value = item.formula;
+                parseButton.click();
+            });
+            historyList.appendChild(li);
+        });
+    }
+
+    renderHistory();
 
     parseButton.addEventListener('click', () => {
         const formula = formulaInput.value;
         variablesSection.innerHTML = '';
         resultSection.innerHTML = '';
 
-        // Регулярное выражение для поиска переменных (одиночные или несколько букв)
         const variables = [...new Set(formula.match(/\b[a-zA-Z]+\b/g))];
 
         if (variables.length > 0) {
@@ -38,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (value === '') {
                         isValid = false;
                     }
-                    // Заменяем переменные на их значения
                     expression = expression.replace(new RegExp(`\\b${v}\\b`, 'g'), `(${value})`);
                 });
 
@@ -48,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 try {
-                    // Обрабатываем дополнительные математические функции
                     expression = expression.replace(/sin\((.*?)\)/g, (match, p1) => `Math.sin(${p1})`);
                     expression = expression.replace(/cos\((.*?)\)/g, (match, p1) => `Math.cos(${p1})`);
                     expression = expression.replace(/tan\((.*?)\)/g, (match, p1) => `Math.tan(${p1})`);
@@ -57,14 +72,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     expression = expression.replace(/pow\((.*?),(.*?)\)/g, (match, p1, p2) => `Math.pow(${p1},${p2})`);
                     expression = expression.replace(/abs\((.*?)\)/g, (match, p1) => `Math.abs(${p1})`);
 
-                    // Обрабатываем константы
                     expression = expression.replace(/PI/g, Math.PI);
                     expression = expression.replace(/E/g, Math.E);
 
-                    // Используем более надёжный способ вычисления, чем простой eval()
                     const result = Function('"use strict";return (' + expression + ')')();
 
                     resultSection.innerHTML = `Результат: <strong>${result}</strong>`;
+
+                    // Добавляем вычисление в историю
+                    history.unshift({ formula: formula, result: result });
+                    if (history.length > 10) { // Ограничиваем историю до 10 записей
+                        history.pop();
+                    }
+                    localStorage.setItem('formulaHistory', JSON.stringify(history));
+                    renderHistory();
+
                 } catch (e) {
                     resultSection.innerHTML = `<span style="color: red;">Ошибка: проверьте синтаксис формулы.</span>`;
                 }
